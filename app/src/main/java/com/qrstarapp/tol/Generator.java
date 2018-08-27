@@ -23,6 +23,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ScrollView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.ads.AdRequest;
@@ -48,7 +49,7 @@ public  class Generator extends Fragment {
     Button generator;
     EditText data;
     Button Share;
-    Button helpp;
+//    Button helpp;
     Button Save;
     File file;
     private String root;
@@ -65,11 +66,12 @@ public  class Generator extends Fragment {
                    iv = (ImageView) rootView.findViewById(R.id.barCodeImage);
 
         generator = (Button) rootView.findViewById(R.id.generatorButton);
-        helpp = (Button) rootView.findViewById(R.id.help);
+       // helpp = (Button) rootView.findViewById(R.id.help);
         data      = (EditText) rootView.findViewById(R.id.datatext);
         Share     = (Button) rootView.findViewById(R.id.shareButton);
         Save      = (Button) rootView.findViewById(R.id.SaveButton);
         final ScrollView scrollView= (ScrollView) rootView.findViewById(R.id.bottom);
+
 
        // AdView mAdView = (AdView) rootView.findViewById(R.id.adViewgen);
     //    AdRequest adRequest = new AdRequest.Builder().build();
@@ -94,10 +96,14 @@ public  class Generator extends Fragment {
 
       // data.setText(Home.DataGetter());
 
-        generator.setOnClickListener(new View.OnClickListener() {
+        generator.setOnClickListener(   new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 try {
+
+//                    Toast.makeText(getActivity(),"Data"+data.getText().toString(),Toast.LENGTH_SHORT).show();
+
+
                     barcode_data=data.getText().toString();
 
                          if(!barcode_data.matches(""))
@@ -109,7 +115,7 @@ public  class Generator extends Fragment {
                              Paint paint = new Paint();
                              paint.setColor(Color.BLACK);
                              paint.setTextSize(40);
-                             canvas.drawText("By QR Star", 210, 390, paint);
+                             canvas.drawText("By PV App", 210, 390, paint);
 
 
                             iv.setImageBitmap(bitmap);
@@ -127,18 +133,17 @@ public  class Generator extends Fragment {
         });
 
 
-        helpp.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-                Intent iinent= new Intent(getActivity(),helpact.class);
-                startActivity(iinent);
-
-
-
-            }
-        });
-
+//        helpp.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//
+//                Intent iinent= new Intent(getActivity(),helpact.class);
+//                startActivity(iinent);
+//
+//
+//
+//            }
+//        });
 
 
         Save.setOnClickListener(new View.OnClickListener() {
@@ -175,6 +180,7 @@ public  class Generator extends Fragment {
 
     private static final int WHITE = 0xFFFFFFFF;
     private static final int BLACK = 0xFF000000;
+
 
     Bitmap encodeAsBitmap(String contents, BarcodeFormat format, int img_width, int img_height) throws WriterException {
         String contentsToEncode = contents;

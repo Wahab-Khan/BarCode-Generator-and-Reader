@@ -15,7 +15,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity android:name=".CamScanne"></activity>
-        <activity android:name=".Home">
+        <activity android:name=".SplashActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -28,8 +28,10 @@
                 <data android:mimeType="text/plain" />
             </intent-filter>
         </activity>
+        <activity android:name=".Home"/>
         <activity android:name=".FileManger"></activity>
         <activity android:name=".helpact"></activity>
+        <activity android:name=".AdminLogin"/>
     </application>
 
 </manifest>

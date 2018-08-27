@@ -35,6 +35,9 @@ public class Scanner extends Fragment implements View.OnClickListener{
     Button      filemanger;
     ImageButton scannericon;
     Button      scanner;
+    ImageButton adminIcon;
+    Button adminButton;
+
     private Activity mContext;
 
     public Scanner()
@@ -66,11 +69,15 @@ public class Scanner extends Fragment implements View.OnClickListener{
         filemanger= (Button) rootView.findViewById(R.id.buttonfile);
         scanner= (Button) rootView.findViewById(R.id.buttonCamera);
         scannericon= (ImageButton) rootView.findViewById(R.id.imageCamera);
+        adminIcon = (ImageButton) rootView.findViewById(R.id.image_admin);
+        adminButton = (Button) rootView.findViewById(R.id.button_admin);
 
         fileicon.setOnClickListener(this);
         filemanger.setOnClickListener(this);
         scanner.setOnClickListener(this);
         scannericon.setOnClickListener(this);
+        adminButton.setOnClickListener(this);
+        adminIcon.setOnClickListener(this);
 
 
 
@@ -94,7 +101,6 @@ public class Scanner extends Fragment implements View.OnClickListener{
                   intent=new Intent(getActivity(),CamScanne.class);
                     startActivity(intent);
 
-
                 break;
             case R.id.buttonCamera :
                 intent=new Intent(getActivity(),CamScanne.class);
@@ -109,6 +115,17 @@ public class Scanner extends Fragment implements View.OnClickListener{
             case R.id.buttonfile :
 
                 intent=new Intent(getActivity(),FileManger.class);
+                startActivity(intent);
+                break;
+
+            case R.id.image_admin:
+
+                intent=new Intent(getActivity(),AdminLogin.class);
+                startActivity(intent);
+                break;
+            case R.id.button_admin:
+
+                intent=new Intent(getActivity(),AdminLogin.class);
                 startActivity(intent);
                 break;
         }
