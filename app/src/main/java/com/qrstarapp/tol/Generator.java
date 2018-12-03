@@ -5,6 +5,7 @@ import android.Manifest;
 import android.app.Activity;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Color;
@@ -47,10 +48,14 @@ public  class Generator extends Fragment {
     ImageView iv;
     String barcode_data=null;
     Button generator;
+//    Button view_btn;
     EditText data;
     Button Share;
 //    Button helpp;
     Button Save;
+
+     DatabaseHelper databaseActivity;
+
     File file;
     private String root;
     private static final int PERMISSION_REQUEST_CODE = 1;
@@ -64,8 +69,10 @@ public  class Generator extends Fragment {
         View rootView = inflater.inflate(R.layout.generator, container, false);
 
                    iv = (ImageView) rootView.findViewById(R.id.barCodeImage);
+        databaseActivity=new DatabaseHelper(getActivity()) ;
 
         generator = (Button) rootView.findViewById(R.id.generatorButton);
+      //  view_btn = (Button) rootView.findViewById(R.id.view_btn);
        // helpp = (Button) rootView.findViewById(R.id.help);
         data      = (EditText) rootView.findViewById(R.id.datatext);
         Share     = (Button) rootView.findViewById(R.id.shareButton);
@@ -85,15 +92,6 @@ public  class Generator extends Fragment {
             requestPermission();
     }
 
-
-
-
-
-
-
-
-
-
       // data.setText(Home.DataGetter());
 
         generator.setOnClickListener(   new View.OnClickListener() {
@@ -101,9 +99,7 @@ public  class Generator extends Fragment {
             public void onClick(View v) {
                 try {
 
-//                    Toast.makeText(getActivity(),"Data"+data.getText().toString(),Toast.LENGTH_SHORT).show();
-
-
+                  Toast.makeText(getActivity(),"Code Generated: "+ data.getText().toString(),Toast.LENGTH_SHORT).show();
                     barcode_data=data.getText().toString();
 
                          if(!barcode_data.matches(""))
@@ -144,6 +140,16 @@ public  class Generator extends Fragment {
 //
 //            }
 //        });
+//        view_btn.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                Toast.makeText(getActivity(),"Clicked",Toast.LENGTH_SHORT).show();
+//
+//             Cursor res= databaseActivity.getAllData(data.getText().toString());
+//            }
+//        });
+
+
 
 
         Save.setOnClickListener(new View.OnClickListener() {
@@ -237,8 +243,18 @@ public  class Generator extends Fragment {
 
     private void saving()
     {
-        if(bitmap!=null)
-        {
+        if(bitmap!=null) {
+
+            if(!data.getText().toString().equalsIgnoreCase("")) {
+                boolean isInserted = databaseActivity.insertData(data.getText().toString());
+                if (isInserted) {
+                    Toast.makeText(getActivity(), "Data Inserted", Toast.LENGTH_SHORT).show();
+                } else {
+                    Toast.makeText(getActivity(), "Data not Inserted", Toast.LENGTH_SHORT).show();
+                }
+            }else{
+                     Toast.makeText(getActivity(), "Data is null", Toast.LENGTH_SHORT).show();
+            }
 
             Share.setVisibility(View.VISIBLE);
             root = Environment.getExternalStorageDirectory()+ "/qr_codes";
@@ -314,9 +330,6 @@ public  class Generator extends Fragment {
                 break;
         }
     }
-
-
-
 
 }
 

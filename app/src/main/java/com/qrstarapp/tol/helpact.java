@@ -33,16 +33,11 @@ public class helpact extends Activity {
         shareapp.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
-
                 Intent shareIntent = new Intent(Intent.ACTION_SEND);
                 shareIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                 shareIntent.setType("text/plain");
-                shareIntent.putExtra(android.content.Intent.EXTRA_TEXT, "qr star https://play.google.com/store/apps/details?id=com.qrstarapp.tol");
+                shareIntent.putExtra(android.content.Intent.EXTRA_TEXT, "PV App https://play.google.com/store/apps/details?id=com.qrstarapp.tol");
                 startActivity(shareIntent);
-
-
-
             }
         });
 
@@ -51,9 +46,6 @@ public class helpact extends Activity {
         rateapp.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
-
-
                 String url = "https://play.google.com/store/apps/details?id=com.qrstarapp.tol";
                 Intent i = new Intent(Intent.ACTION_VIEW);
                 i.setData(Uri.parse(url));

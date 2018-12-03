@@ -5,6 +5,7 @@ import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
@@ -51,7 +52,7 @@ public class FileManger extends AppCompatActivity {
     private String decoded;
     private Button readAgain;
     private InterstitialAd mInterstitialAd;
-
+    DatabaseHelper databaseHelper;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -60,7 +61,7 @@ public class FileManger extends AppCompatActivity {
         Intent photoPickerIntent = new Intent(Intent.ACTION_PICK);
         photoPickerIntent.setType("image/*");
         startActivityForResult(photoPickerIntent, SELECT_PHOTO);
-
+        databaseHelper=new DatabaseHelper(this);
         mInterstitialAd = new InterstitialAd(this);
         mInterstitialAd.setAdUnitId("ca-app-pub-4035233662996005/7069022975");
 
@@ -177,18 +178,43 @@ public class FileManger extends AppCompatActivity {
                     try {
                         imageStream = getContentResolver().openInputStream(selectedImage);
                          yourSelectedImage = BitmapFactory.decodeStream(imageStream);
+                            decoded=scanQRImage(yourSelectedImage);
 
-                         decoded=scanQRImage(yourSelectedImage);
-                        if(decoded!=null)
-                        {
-                            result.setText(decoded);
+
+                        Cursor cursor=databaseHelper.getAllData();
+
+                        if(cursor.getCount()==0){
+                            // show message
+                            Toast toast = Toast.makeText(this, "NO RECORD FOUND",Toast.LENGTH_SHORT);
+                            toast.show();
+                            return;
+
+                        }else{
+
+                            if(cursor.moveToNext()){
+                                if(decoded.equalsIgnoreCase(cursor.getString(cursor.getColumnIndex("PCOD_code")))){
+                                    result.setText("ProdCode:"+decoded);
+                                    Toast toast = Toast.makeText(this, "Your Product is original", Toast.LENGTH_SHORT);
+                                    toast.show();
+                                }else{
+                                    result.setText("Your Product is not match");
+                                    Toast toast = Toast.makeText(this, "Your Product is not original", Toast.LENGTH_SHORT);
+                                    toast.show();
+
+                                }
+
+                                cursor.close();
+
+                            }
+
+                        }
 
                             if (mInterstitialAd.isLoaded()) {
                                 mInterstitialAd.show();
                             } else {
                                 dialog.show();                            }
 
-                        }
+
                         Log.i("QrTest", "Decoded string="+decoded);
 
                     }

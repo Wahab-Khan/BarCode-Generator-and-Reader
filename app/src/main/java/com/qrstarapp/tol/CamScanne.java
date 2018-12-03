@@ -6,6 +6,7 @@ import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.database.Cursor;
 import android.net.Uri;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
@@ -27,10 +28,13 @@ import com.google.zxing.Result;
 import cn.pedant.SweetAlert.SweetAlertDialog;
 import me.dm7.barcodescanner.zxing.ZXingScannerView;
 
+import static com.qrstarapp.tol.DatabaseHelper.COL_2;
+import static com.qrstarapp.tol.DatabaseHelper.TABLE_NAME;
+
 public class CamScanne extends AppCompatActivity implements ZXingScannerView.ResultHandler {
     private ZXingScannerView mScannerView;
     private static final int PERMISSION_REQUEST_CODE = 1;
-
+    DatabaseHelper databaseHelper;
     private Activity context;
     private Dialog dialog;
     private Button copy;
@@ -52,7 +56,7 @@ public class CamScanne extends AppCompatActivity implements ZXingScannerView.Res
         else
             requestPermission();
 
-
+        databaseHelper=new DatabaseHelper(this);
         dialog = new Dialog(this);
         // Include dialog.xml file
         dialog.setContentView(R.layout.custom);
@@ -150,10 +154,6 @@ public class CamScanne extends AppCompatActivity implements ZXingScannerView.Res
             }
         });
 
-
-
-
-
     }
 
     @Override
@@ -195,9 +195,37 @@ public class CamScanne extends AppCompatActivity implements ZXingScannerView.Res
         CharSequence text = getResources().getString(R.string.tostcopy);
         int duration = Toast.LENGTH_SHORT;
 
-        Toast toast = Toast.makeText(context, text, duration);
-        toast.show();
-        result.setText(decoded);
+
+        Object name=0;
+        Cursor cursor=databaseHelper.getAllData();
+
+        if(cursor.getCount()==0){
+            // show message
+            Toast toast = Toast.makeText(context, "NO RECORD FOUND", duration);
+            toast.show();
+            return;
+
+        }else{
+
+            if(cursor.moveToNext()){
+            if(decoded.equalsIgnoreCase(cursor.getString(cursor.getColumnIndex("PCOD_code")))){
+            result.setText("ProdCode:"+decoded);
+                Toast toast = Toast.makeText(context, "Your Product is original", duration);
+                toast.show();
+            }else{
+                result.setText("Your Product did not match");
+                Toast toast = Toast.makeText(context, "Your Product is not original", duration);
+                toast.show();
+
+            }
+
+            cursor.close();
+
+            }
+
+        }
+
+
 
         if (mInterstitialAd.isLoaded()) {
             mInterstitialAd.show();
@@ -254,7 +282,7 @@ public class CamScanne extends AppCompatActivity implements ZXingScannerView.Res
 
                 } else {
 
-finish();
+                      finish();
                 }
                 break;
         }
