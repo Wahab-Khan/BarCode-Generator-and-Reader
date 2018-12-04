@@ -191,20 +191,25 @@ public class FileManger extends AppCompatActivity {
 
                         }else{
 
-                            if(cursor.moveToNext()){
-                                if(decoded.equalsIgnoreCase(cursor.getString(cursor.getColumnIndex("PCOD_code")))){
-                                    result.setText("ProdCode:"+decoded);
+                            if(cursor.moveToFirst()){
+                                do{
+                                if(decoded.equalsIgnoreCase(cursor.getString(cursor.getColumnIndex("PCOD_code")))) {
+                                    result.setText("ProdCode:" + decoded);
                                     Toast toast = Toast.makeText(this, "Your Product is original", Toast.LENGTH_SHORT);
                                     toast.show();
+                                    break;
                                 }else{
-                                    result.setText("Your Product is not match");
-                                    Toast toast = Toast.makeText(this, "Your Product is not original", Toast.LENGTH_SHORT);
-                                    toast.show();
-
+//                                    result.setText("Your Product is not match");
+//                                    Toast toast = Toast.makeText(this, "Your Product is not original", Toast.LENGTH_SHORT);
+//                                    toast.show();
                                 }
 
+                                }while (cursor.moveToNext());
                                 cursor.close();
-
+                            }else {
+                                result.setText("Your Product is not match");
+                                    Toast toast = Toast.makeText(this, "Your Product is not original", Toast.LENGTH_SHORT);
+                                    toast.show();
                             }
 
                         }
